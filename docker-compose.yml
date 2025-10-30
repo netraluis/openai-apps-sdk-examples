@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  pizzaz-mcp:
+    build:
+      context: .
+      target: mcp
+    environment:
+      - PORT=8000
+      # Opcional: reemplaza localhost dentro del HTML si quieres URL pública fija
+      # - PUBLIC_BASE_URL=https://tu-dominio
+      # o si prefieres mantener el nombre histórico:
+      # - NGROK_URL=
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  pizzaz-assets:
+    build:
+      context: .
+    # target por defecto será "assets" si lo indicas:
+    target: assets
+    ports:
+      - "4444:4444"
+    restart: unless-stopped

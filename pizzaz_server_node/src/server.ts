@@ -41,6 +41,7 @@ const ROOT_DIR = path.resolve(__dirname, "..", "..");
 const ASSETS_DIR = path.resolve(ROOT_DIR, "assets");
 
 function readWidgetHtml(componentName: string): string {
+  console.log("readWidgetHtml", componentName);
   if (!fs.existsSync(ASSETS_DIR)) {
     throw new Error(
       `Widget assets not found. Expected directory ${ASSETS_DIR}. Run "pnpm run build" before starting the server.`
@@ -75,6 +76,7 @@ function readWidgetHtml(componentName: string): string {
 }
 
 function widgetMeta(widget: PizzazWidget) {
+  console.log("widgetMeta", widget);
   return {
     "openai/outputTemplate": widget.templateUri,
     "openai/toolInvocation/invoking": widget.invoking,
@@ -97,7 +99,7 @@ const widgets: PizzazWidget[] = [
   {
     id: "pizza-carousel",
     title: "Show Pizza Carousel",
-    templateUri: "ui://widget/pizza-carousel.html",
+    templateUri: "ui://pizza-carousel.html",
     invoking: "Carousel some spots",
     invoked: "Served a fresh carousel",
     html: readWidgetHtml("pizzaz-carousel"),
