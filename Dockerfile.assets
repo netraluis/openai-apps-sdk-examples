@@ -1,0 +1,23 @@
+# Build assets once, then serve them statically
+
+# 1) Builder: compila assets con pnpm
+FROM node:20-alpine AS builder
+WORKDIR /app
+RUN corepack enable
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY tsconfig*.json vite*.mts tailwind.config.ts build-all.mts dev-all.mts ./
+COPY src ./src
+
+RUN pnpm install --frozen-lockfile
+RUN pnpm run build
+
+# 2) Runtime: servidor estático con serve
+FROM node:20-alpine
+WORKDIR /app
+RUN npm i -g serve@14.2.4
+
+COPY --from=builder /app/assets ./assets
+
+EXPOSE 4444
+CMD ["serve","-s","./assets","-p","4444","--cors"]

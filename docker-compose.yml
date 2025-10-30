@@ -4,22 +4,28 @@ services:
   pizzaz-mcp:
     build:
       context: .
-      target: mcp
+      dockerfile: Dockerfile.mcp
     environment:
       - PORT=8000
-      # Opcional: reemplaza localhost dentro del HTML si quieres URL pública fija
-      # - PUBLIC_BASE_URL=https://tu-dominio
-      # o si prefieres mantener el nombre histórico:
-      # - NGROK_URL=
+      # - PUBLIC_BASE_URL=https://tu-dominio  # opcional
     ports:
       - "8000:8000"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8000/mcp >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   pizzaz-assets:
     build:
       context: .
-    # target por defecto será "assets" si lo indicas:
-    target: assets
+      dockerfile: Dockerfile.assets
     ports:
       - "4444:4444"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:4444/pizzaz.html >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
