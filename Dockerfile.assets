@@ -19,5 +19,8 @@ RUN npm i -g serve@14.2.4
 
 COPY --from=builder /app/assets ./assets
 
+# Disable clean URLs and SPA rewrites so .html works as-is
+COPY assets.serve.json ./assets/serve.json
+
 EXPOSE 4444
-CMD ["serve","-s","./assets","-p","4444","--cors"]
+CMD ["serve","./assets","-p","4444","--cors"]

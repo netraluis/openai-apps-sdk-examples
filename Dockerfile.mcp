@@ -22,10 +22,11 @@ RUN corepack enable \
 
 # Copiamos archivos de workspace + paquete del server para que pnpm resuelva deps
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
-COPY pizzaz_server_node/package.json pizzaz_server_node/tsconfig.json pizzaz_server_node/src ./pizzaz_server_node/
+# Copia el paquete completo (incluye src/)
+COPY pizzaz_server_node/ /app/pizzaz_server_node/
 
 # Instala solo lo necesario para el paquete del server (sin frozen-lockfile para evitar fallo en CI)
-RUN pnpm install --no-frozen-lockfile --filter "pizzaz-mcp-node..."
+RUN pnpm install --no-frozen-lockfile --filter "pizzaz-mcp-node"
 
 # Copia los assets ya construidos
 COPY --from=builder /app/assets /app/assets
