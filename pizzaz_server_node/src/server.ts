@@ -346,6 +346,25 @@ const httpServer = createServer(
 
     const url = new URL(req.url, `http://${req.headers.host ?? "localhost"}`);
 
+    // Health check / info endpoint
+    if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/health")) {
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      });
+      res.end(JSON.stringify({
+        name: "pizzaz-mcp-node",
+        version: "0.1.0",
+        status: "running",
+        endpoints: {
+          sse: `${ssePath}`,
+          messages: `${postPath}`,
+        },
+        sessions: sessions.size,
+      }));
+      return;
+    }
+
     if (
       req.method === "OPTIONS" &&
       (url.pathname === ssePath || url.pathname === postPath)
