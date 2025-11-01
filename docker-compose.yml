@@ -7,10 +7,15 @@ services:
       dockerfile: Dockerfile.mcp
     environment:
       - PORT=8000
-      # - PUBLIC_BASE_URL=https://tu-dominio  # opcional
     ports:
       - "8000:8000"
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pizzaz-mcp.rule=Host(`netra-composeopenaisdk-nhq6im-c25178-31-97-196-225.traefik.me`)"
+      - "traefik.http.routers.pizzaz-mcp.entrypoints=web"
+      - "traefik.http.services.pizzaz-mcp.loadbalancer.server.port=8000"
+
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8000/health >/dev/null 2>&1 || exit 1"]
       interval: 30s
@@ -24,6 +29,12 @@ services:
     ports:
       - "4444:4444"
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pizzaz-assets.rule=Host(`assets.netra-composeopenaisdk-nhq6im-c25178-31-97-196-225.traefik.me`)"
+      - "traefik.http.routers.pizzaz-assets.entrypoints=web"
+      - "traefik.http.services.pizzaz-assets.loadbalancer.server.port=4444"
+
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:4444/pizzaz.html >/dev/null 2>&1 || exit 1"]
       interval: 30s
