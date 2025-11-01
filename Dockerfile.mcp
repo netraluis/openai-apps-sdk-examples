@@ -16,17 +16,15 @@ RUN pnpm run build
 # 2) Runtime: servidor MCP en Node
 FROM node:20-alpine
 WORKDIR /app
-ENV NODE_ENV=production
-RUN corepack enable \
-  && npm i -g tsx@4.19.2 typescript@5.6.3
+RUN corepack enable
 
 # Copiamos archivos de workspace + paquete del server para que pnpm resuelva deps
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 # Copia el paquete completo (incluye src/)
 COPY pizzaz_server_node/ /app/pizzaz_server_node/
 
-# Instala solo lo necesario para el paquete del server (sin frozen-lockfile para evitar fallo en CI)
-RUN pnpm install --no-frozen-lockfile --filter "pizzaz-mcp-node"
+# Instala dependencias incluyendo devDependencies (tsx necesario para ejecutar)
+RUN cd pizzaz_server_node && pnpm install --no-frozen-lockfile
 
 # Copia los assets ya construidos
 COPY --from=builder /app/assets /app/assets
