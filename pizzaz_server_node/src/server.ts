@@ -182,6 +182,7 @@ const resourceTemplates: ResourceTemplate[] = widgets.map((widget) => ({
 function createPizzazServer(): Server {
   const server = new Server(
     {
+      roots: { listChanged: true },
       name: "pizzaz-node",
       version: "0.1.0",
     },
