@@ -12,8 +12,9 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pizzaz-mcp.rule=Host(`netra-composeopenaisdk-nhq6im-c25178-31-97-196-225.traefik.me`)"
-      - "traefik.http.routers.pizzaz-mcp.entrypoints=web"
+      - "traefik.http.routers.pizzaz-mcp.rule=Host(`mcp-openai.netraluis.xyz`)"
+      - "traefik.http.routers.pizzaz-mcp.entrypoints=websecure"
+      - "traefik.http.routers.pizzaz-mcp.tls=true"
       - "traefik.http.services.pizzaz-mcp.loadbalancer.server.port=8000"
 
     healthcheck:
