@@ -162,7 +162,8 @@ console.groupEnd();
 
 console.log("new hash: ", h);
 
-const defaultBaseUrl = "http://pizzaz-assets:4444";
+// const defaultBaseUrl = "http://pizzaz-assets:4444";
+const defaultBaseUrl = "http://localhost:4444";
 const baseUrlCandidate = process.env.BASE_URL?.trim() ?? "";
 const baseUrlRaw = baseUrlCandidate.length > 0 ? baseUrlCandidate : defaultBaseUrl;
 const normalizedBaseUrl = baseUrlRaw.replace(/\/+$/, "") || defaultBaseUrl;
